@@ -40,14 +40,14 @@ Además, se anticipa que la seguridad pública juegue un papel crucial en mitiga
   - Descripción: Este conjunto de datos es una compilación de incidentes criminales reportados en todo México. Incluye registros detallados de diversas actividades criminales, ofreciendo información sobre patrones y tendencias delictivas en diferentes regiones.
   - Descripción de columnas:
     - year: The year when the crime was reported. This is a numeric field representing the calendar year (e.g., 2015).
-  - entity_code: A numeric code representing a specific entity (state or region) within Mexico. Each number corresponds to a unique entity.
-  - entity: The name of the Mexican state or region where the crime occurred. This is a textual field (e.g., Aguascalientes).
-  - affected_legal_good: A categorical field describing the broad category of the legal good (i.e., personal or societal interest) affected by the crime.
-  - type_of_crime: A categorical field indicating the general type of crime. This field is more specific than 'affected_legal_good' but less specific than 'subtype_of_crime'. Examples include 'Abduction', 'Sexual abuse', and 'Robbery'.
-  - subtype_of_crime: A further categorization of the type of crime. This field provides more specific details within the general type of crime. Examples include 'Sexual Harassment', 'Simple Rape', and 'Home Burglary'.
-  - modality: The specific nature or method of the crime. This field details how the crime was committed or any specific characteristic that differentiates it within its subtype. Examples include 'With violence', 'Without violence', 'Sexual Bullying'.
-  - month: The month when the crime was reported. This is a textual field representing the month (e.g., January).
-  - count: The number of reported incidents for the specific crime type, subtype, and modality in the given entity and month. This is a numeric field
+    - entity_code: A numeric code representing a specific entity (state or region) within Mexico. Each number corresponds to a unique entity.
+    - entity: The name of the Mexican state or region where the crime occurred. This is a textual field (e.g., Aguascalientes).
+    - affected_legal_good: A categorical field describing the broad category of the legal good (i.e., personal or societal interest) affected by the crime.
+    - type_of_crime: A categorical field indicating the general type of crime. This field is more specific than 'affected_legal_good' but less specific than 'subtype_of_crime'. Examples include 'Abduction', 'Sexual abuse', and 'Robbery'.
+    - subtype_of_crime: A further categorization of the type of crime. This field provides more specific details within the general type of crime. Examples include 'Sexual Harassment', 'Simple Rape', and 'Home Burglary'.
+    - modality: The specific nature or method of the crime. This field details how the crime was committed or any specific characteristic that differentiates it within its subtype. Examples include 'With violence', 'Without violence', 'Sexual Bullying'.
+    - month: The month when the crime was reported. This is a textual field representing the month (e.g., January).
+    - count: The number of reported incidents for the specific crime type, subtype, and modality in the given entity and month. This is a numeric field
 
 
 ## Estructura del código
