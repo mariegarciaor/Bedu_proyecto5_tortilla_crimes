@@ -26,7 +26,7 @@ Además, se anticipa que la seguridad pública juegue un papel crucial en mitiga
 - **Tortilla prices**
   - [Enlace al dataset](https://www.kaggle.com/datasets/richave/tortilla-prices-in-mexico)
   - Descripción: Este conjunto de datos consiste en más de +270k registros de precios de tortillas del Sistema Nacional de Información e Integración de Mercados de México, el cual encuesta 53 ciudades, 384 tiendas familiares y 120 tiendas minoristas que venden "tortillas" en todo México.
-  - Descripción de Columnas:
+  - Columnas:
     - State: State in Mexico where the city is located, all 32 states en Mexico are included in the dataset
     - City: Major cities in Mexico where prices are surveyed
     - Year: Year corresponding to observation
@@ -38,7 +38,7 @@ Además, se anticipa que la seguridad pública juegue un papel crucial en mitiga
 - **Mexican crime statistics**
   - [Enlace al dataset](https://www.kaggle.com/datasets/elanderos/official-crime-stats-mexico-2015-2023)
   - Descripción: Este conjunto de datos es una compilación de incidentes criminales reportados en todo México. Incluye registros detallados de diversas actividades criminales, ofreciendo información sobre patrones y tendencias delictivas en diferentes regiones.
-  - Descripción de columnas:
+  - Columnas:
     - year: The year when the crime was reported. This is a numeric field representing the calendar year (e.g., 2015).
     - entity_code: A numeric code representing a specific entity (state or region) within Mexico. Each number corresponds to a unique entity.
     - entity: The name of the Mexican state or region where the crime occurred. This is a textual field (e.g., Aguascalientes).
@@ -50,7 +50,8 @@ Además, se anticipa que la seguridad pública juegue un papel crucial en mitiga
     - count: The number of reported incidents for the specific crime type, subtype, and modality in the given entity and month. This is a numeric field
 
 
-## Estructura del código
+## Estructura del código:
+
 
 ## Gráficas e interpretación
 
