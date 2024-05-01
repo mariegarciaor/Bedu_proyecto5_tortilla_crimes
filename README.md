@@ -50,6 +50,9 @@ Además, se anticipa que la seguridad pública juegue un papel crucial en mitiga
     - count: The number of reported incidents for the specific crime type, subtype, and modality in the given entity and month. This is a numeric field
 
 
+## Limpieza de datos
+[] Estandarización de los nombres de estados.
+
 ## Estructura del código:
 
 
