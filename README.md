@@ -51,7 +51,16 @@ Además, se anticipa que la seguridad pública juegue un papel crucial en mitiga
 
 
 ## Limpieza de datos
+[x] Delimitar rango de tiempo.
+[x] Decidir entre usar identificadores numéricos o texto para estados (se eligió texto)
 [] Estandarización de los nombres de estados.
+[] Decidir entre hacer una vista diaria, mensual o anual (se eligió mensual)
+[] Crear una vista mensual para precios de la tortilla y crimenes.
+[] Definir nueva estructura para el dataset.
+state | year | month | tortilla_price | store_type | count_of_crimes | type_of_crime | type_of_crime | crime_modality
+
+
+
 
 ## Estructura del código:
 
