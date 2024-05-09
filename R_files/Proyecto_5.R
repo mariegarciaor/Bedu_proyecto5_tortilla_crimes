@@ -1,4 +1,4 @@
-# Packages
+# PACKAGES
 install.packages("ggplot2")
 library(ggplot2)
 install.packages("dplyr")
@@ -6,29 +6,29 @@ library(dplyr)
 install.packages("DescTools")
 library(DescTools)
 
-# Datasets imports
+# DATASETS IMPORTS
 df <- read.csv("/cloud/project/databases/mexico_crime_and_tortilla.csv")
 print(df)
 
-# Month clean
+# DATA CLEANNING
 months_str <- month.name
 df$month_num <- match(df$month, months_str)
 df$full_date <- as.Date(paste(df$year, df$month_num, "01", sep = "-"))
 print(df)
 
-# Structure of dataset
+# DATASET STRUCTURE ANALYSIS
 dim(df)
 class(df)
 str(df)
 
-# Samples of dataset
+# SAMPLES
 head(df)
 tail (df)
 df_sample <- df[sample(nrow(df), 5, replace = FALSE), ]
 df_sample
 
 
-# Subsets
+# SUBSETS
 df_tortilla <- subset(df, metric == 'tortilla_prices')
 head(df_tortilla, n = 6)
 summary(df_tortilla)
@@ -39,63 +39,138 @@ head(df_crimes, n = 6)
 summary(df_crimes)
 View(df_crimes)
 
-# Basic statistics
-# Mean
+
+# BASIC STATISTICS
+# Tortilla
+
+# Mean for all store types
 mean_tortilla <- mean(df_tortilla$tortilla_price)
 print(mean_tortilla)
 
-mean_crimes <- mean(df_crimes$count_of_crimes)
-print(mean_crimes)
+# Mean for 'Mom and Pop Store'
+mean_mom_and_pop <- mean(filter(df_tortilla, store_type == 'Mom and Pop Store')$tortilla_price)
+print(mean_mom_and_pop)
+
+# Mean for 'Big Retail Store'
+mean_big_retail <- mean(filter(df_tortilla, store_type == 'Big Retail Store')$tortilla_price)
+print(mean_big_retail)
 
 # Median
 median_tortilla <- median(df_tortilla$tortilla_price)
 print(median_tortilla)
 
-median_crimes <- median(df_crimes$count_of_crimes)
-print(median_crimes)
 
 # Standard deviation
 sd_tortilla <- sd(df_tortilla$tortilla_price)
 print(sd_tortilla)
 
-sd_crimes <- sd(df_crimes$count_of_crimes)
-print(sd_crimes)
+# Standard deviation 'Mom and Pop Store'
+sd_mom_and_pop <- sd(filter(df_tortilla, store_type == 'Mom and Pop Store')$tortilla_price)
+print(sd_mom_and_pop)
+
+# Standard deviation 'Big Retail Store'
+sd_big_retail <- sd(filter(df_tortilla, store_type == 'Big Retail Store')$tortilla_price)
+print(sd_big_retail)
+
+# These results indicate that tortilla prices have different variability depending on the type of store, with the lowest variability in 'Big Retail Store' types compared to 'Mom and Pop Store' types.
 
 # Minimum
 minimum_tortilla <- min(df_tortilla$tortilla_price)
 print(minimum_tortilla)
 
-minimum_crimes <- min(df_crimes$count_of_crimes)
-print(minimum_crimes)
+# Minimum 'Mom and Pop Store'
+minimum_mom_and_pop <- min(filter(df_tortilla, store_type == 'Mom and Pop Store')$tortilla_price)
+print(minimum_mom_and_pop)
+
+# Minimum for 'Big Retail Store'
+minimum_big_retail <- min(filter(df_tortilla, store_type == 'Big Retail Store')$tortilla_price)
+print(minimum_big_retail)
+
 
 # Maximum
 maximum_tortilla <- max(df_tortilla$tortilla_price)
 print(maximum_tortilla)
 
-maximum_crimes <- max(df_crimes$count_of_crimes)
-print(maximum_crimes)
+# Maximum for 'Mom and Pop Store'
+maximum_mom_and_pop <- max(filter(df_tortilla, store_type == 'Mom and Pop Store')$tortilla_price)
+print(maximum_mom_and_pop)
+
+# Maximum for 'Big Retail Store'
+maximum_big_retail <- max(filter(df_tortilla, store_type == 'Big Retail Store')$tortilla_price)
+print(maximum_big_retail)
+
 
 # Quantiles
 quantile(df_tortilla$tortilla_price, c(0.25,0.50,0.75))
+quantile(filter(df_tortilla, store_type == 'Mom and Pop Store')$tortilla_price, c(0.25, 0.50, 0.75))
+quantile(filter(df_tortilla, store_type == 'Big Retail Store')$tortilla_price, c(0.25, 0.50, 0.75))
+
 IQR(df_tortilla$tortilla_price)
+IQR(filter(df_tortilla, store_type == 'Mom and Pop Store')$tortilla_price)
+IQR(filter(df_tortilla, store_type == 'Big Retail Store')$tortilla_price)
+# Analysis: The IQR is a measure of dispersion that indicates the spread of central values in a dataset. It is the difference between the third quartile (Q3) and the first quartile (Q1), that is, IQR = Q3 - Q1.
+# Tortilla prices at 'Big Retail Store' types of stores have a narrower dispersion compared to 'Mom and Pop Store' types and overall across the entire dataset.
+
+
 var(df_tortilla$tortilla_price)
+var(filter(df_tortilla, store_type == 'Mom and Pop Store')$tortilla_price)
+var(filter(df_tortilla, store_type == 'Big Retail Store')$tortilla_price)
+# Analysis: Variance provides information about the dispersion of tortilla prices around the mean.
+# Tortilla prices at 'Big Retail Store' types of stores are more clustered around a central value.
 
 
-# Simplified subsets
+# mexico_crimes
+mean_crimes <- mean(df_crimes$count_of_crimes)
+print(mean_crimes)
+
+median_crimes <- median(df_crimes$count_of_crimes)
+print(median_crimes)
+
+sd_crimes <- sd(df_crimes$count_of_crimes)
+print(sd_crimes)
+
+minimum_crimes <- min(df_crimes$count_of_crimes)
+print(minimum_crimes)
+
+maximum_crimes <- max(df_crimes$count_of_crimes)
+print(maximum_crimes)
+
+
+# SIMPLIFIED SUBSETS
 # We created simplified subsets that allowed us to have only one aggregated row per state and date (month, year).
 tortilla_simp_df <- df_tortilla %>%
-  group_by(metric, state, full_date) %>%
+  filter(store_type == 'Mom and Pop Store') %>%
+  group_by(state, full_date, year, month) %>%
   summarise(tortilla_avg_price = mean(tortilla_price)) %>%
   arrange(state, full_date)
 print(tortilla_simp_df)
 
 crime_simp_df <- df_crimes %>%
-  group_by(metric, state, full_date) %>%
+  group_by(state, full_date) %>%
   summarise(total_crimes = sum(count_of_crimes)) %>%
   arrange(state, full_date)
 print(crime_simp_df)
 
-# Merged dataset
+# FINAL DATASET (MERGED)
 full_df <- merge(tortilla_simp_df, crime_simp_df, by = c("full_date", "state"))
-print(full_df)
 View(full_df)
+
+# ANALYSIS
+# Analyzing Tortilla Price Change Rates
+
+# Below and Above Average Trend by Year
+avg_prices_by_year <- full_df %>%
+  group_by(year) %>%
+  summarise(yly_tortilla_avg_price = mean(tortilla_avg_price, na.rm = TRUE))
+
+full_df <- full_df %>%
+  left_join(avg_prices_by_year, by = "year") %>%
+  mutate(price_vs_avg_year = ifelse(tortilla_avg_price > yly_tortilla_avg_price, "Above Year Average", "Below Year Average"))
+
+# Tortilla Price Change Rates Over Time by State
+full_df <- full_df %>%
+  arrange(state, full_date) %>%
+  group_by(state) %>%
+  mutate(price_change_rate = (tortilla_avg_price - lag(tortilla_avg_price)) / lag(tortilla_avg_price))
+
+
