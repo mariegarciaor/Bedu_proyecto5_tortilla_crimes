@@ -1,14 +1,10 @@
 # PACKAGES
-install.packages("ggplot2")
 library(ggplot2)
-install.packages("dplyr")
 library(dplyr)
-install.packages("DescTools")
 library(DescTools)
 
-# DATASETS IMPORTS
-df <- read.csv("/cloud/project/databases/mexico_crime_and_tortilla.csv")
-print(df)
+load_data <- function() {
+  df <- read.csv("/cloud/project/mexico_crime_and_tortilla.csv")
 
 # DATA CLEANNING
 months_str <- month.name
@@ -42,23 +38,21 @@ View(df_crimes)
 
 # BASIC STATISTICS
 # Tortilla
-
 # Mean for all store types
 mean_tortilla <- mean(df_tortilla$tortilla_price)
 print(mean_tortilla)
 
 # Mean for 'Mom and Pop Store'
-mean_mom_and_pop <- mean(filter(df_tortilla, store_type == 'Mom and Pop Store')$tortilla_price)
+mean_mom_and_pop <- mean(filter(df_tortilla, store_type == 'Mom and Pop Store')$tortilla_price, na.rm = TRUE)
 print(mean_mom_and_pop)
 
 # Mean for 'Big Retail Store'
-mean_big_retail <- mean(filter(df_tortilla, store_type == 'Big Retail Store')$tortilla_price)
+mean_big_retail <- mean(filter(df_tortilla, store_type == 'Big Retail Store')$tortilla_price, na.rm = TRUE)
 print(mean_big_retail)
 
 # Median
 median_tortilla <- median(df_tortilla$tortilla_price)
 print(median_tortilla)
-
 
 # Standard deviation
 sd_tortilla <- sd(df_tortilla$tortilla_price)
@@ -157,7 +151,6 @@ View(full_df)
 
 # ANALYSIS
 # Analyzing Tortilla Price Change Rates
-
 # Below and Above Average Trend by Year
 avg_prices_by_year <- full_df %>%
   group_by(year) %>%
@@ -174,3 +167,76 @@ full_df <- full_df %>%
   mutate(price_change_rate = (tortilla_avg_price - lag(tortilla_avg_price)) / lag(tortilla_avg_price))
 
 
+# Analyzing Crime Change Rates
+# Below and Above Average Trend by Year
+avg_crimes_by_year <- full_df %>%
+  group_by(year) %>%
+  summarise(yly_avg_crimes = mean(total_crimes, na.rm = TRUE))
+
+full_df <- full_df %>%
+  left_join(avg_crimes_by_year, by = "year") %>%
+  mutate(crimes_vs_avg_year = ifelse(total_crimes > yly_avg_crimes, "Above Year Average", "Below Year Average"))
+
+# Crimes Change Rates Over Time by State
+full_df <- full_df %>%
+  arrange(state, full_date) %>%
+  group_by(state) %>%
+  mutate(crimes_change_rate = (total_crimes - lag(total_crimes)) / lag(total_crimes))
+
+
+full_df %>% sample_n(6)
+
+# Correlation
+# For whole dataset
+correlation_total <- cor(full_df$tortilla_avg_price, full_df$total_crimes, use = "complete.obs")
+print(paste("Total Correlation:", correlation_total))
+
+# by State
+correlation_by_state <- full_df %>%
+  group_by(state) %>%
+  summarise(correlation = cor(tortilla_avg_price, total_crimes, use = "complete.obs"))
+
+# Categorization 
+correlation_by_state <- correlation_by_state %>%
+  mutate(correlation_type = case_when(
+    correlation > 0.7 ~ "Strong Positive Correlation",
+    correlation > 0 & correlation <= 0.7 ~ "Weak Positive Correlation",
+    correlation < -0.7 ~ "Strong Negative Correlation",
+    correlation >= -0.7 & correlation < 0 ~ "Weak Negative Correlation",
+    abs(correlation) <= 0.7 ~ "Weak Correlation"
+  ))
+
+print(paste("Total Correlation:", correlation_total))
+View(correlation_by_state)
+
+
+# Crear un gráfico de barras para la correlación por estado
+bar_plot <- ggplot(correlation_by_state, aes(x = state, y = correlation, fill = correlation_type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Correlation by State",
+       x = "State",
+       y = "Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Mostrar el gráfico de barras
+print(bar_plot)
+
+# Return a list of objects
+data_list <- list(
+  df = df,
+  df_tortilla = df_tortilla,
+  df_crimes = df_crimes,
+  mean_tortilla = mean_tortilla,
+  mean_mom_and_pop = mean_mom_and_pop,
+  mean_big_retail = mean_big_retail,
+  tortilla_simp_df = tortilla_simp_df,
+  crime_simp_df = crime_simp_df,
+  full_df = full_df,
+  correlation_total = correlation_total,
+  correlation_by_state = correlation_by_state
+)
+
+return(data_list)
+
+}
