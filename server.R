@@ -6,6 +6,8 @@ library(DT)
 # Cargar datos al iniciar la aplicación
 source("functions.R")
 data <- load_data()
+df_tortilla <- data$df_tortilla
+df_crimes <- data$df_crimes
 full_df <- data$full_df
 correlation_by_state <- data$correlation_by_state
 mean_tortilla <- data$mean_tortilla
@@ -14,6 +16,8 @@ mean_big_retail<- data$mean_big_retail
 tortilla_simp_df<- data$tortilla_simp_df
 crime_simp_df<- data$crime_simp_df
 correlation_total<- data$correlation_total
+correlation_by_state<- data$correlation_by_state
+bar_plot<- data$bar_plot
 
 # Se define el servidor para la aplicación Shiny
 shinyServer(
@@ -54,15 +58,21 @@ function(input, output) {
            color = "State")
   })
   
+  # Correlación
+  # Mostrar el gráfico de barras
+  output$bar_plot <- renderPlot({
+    data_list$bar_plot
+  })
+  
+  # Mostrar la tabla
+  output$correlation_table <- renderDataTable({
+    data_list$correlation_by_state
+  })
+  
   
   # Summary
   output$output_summary <- renderPrint({
     summary(full_df)
-  })
-  
-  # Tabla
-  output$output_table <- renderTable({
-    data.frame(full_df)
   })
   
   # DataTable
@@ -70,5 +80,33 @@ function(input, output) {
     full_df
   }, options = list(aLengthMenu = c(5, 25, 50),
                     iDisplayLength = 5))
-}
-)
+  
+  # DataTable Tortilla
+  output$output_table_tortilla <- renderDataTable({
+    selected_cols <- c("year", "month", "state", "tortilla_price", "store_type")
+    df_tortilla_subset <- df_tortilla[, selected_cols, drop = FALSE]
+    df_tortilla_subset
+  }, options = list(
+    searching = TRUE,  # Habilitar búsqueda
+    searchCols = c(1, 2, 3, 4, 5, 6), # Habilitar búsqueda por todas las columnas
+    ordering = TRUE,   # Habilitar ordenación
+    paging = TRUE,     # Habilitar paginación
+    aLengthMenu = c(5, 25, 50),  # Longitudes de página personalizadas
+    iDisplayLength = 5  # Longitud de página inicial
+  ))
+  
+  # DataTable Crimes
+  output$output_table_crimes <- renderDataTable({
+    selected_cols <- c("year", "month", "state", "count_of_crimes", "type_of_crime")
+    df_crimes_subset <- df_crimes[, selected_cols, drop = FALSE]
+    df_crimes_subset
+  }, options = list(
+    searching = TRUE,  
+    searchCols = c(1, 2, 3, 4, 5, 6),
+    ordering = TRUE, 
+    paging = TRUE,
+    aLengthMenu = c(5, 25, 50),
+    iDisplayLength = 5
+  ))
+
+})

@@ -47,13 +47,25 @@ ui <- fluidPage(
       tabPanel("Plots",
                plotOutput("my_plot")
       ),
+      # Correlations
+      tabPanel("Correlations",
+               # Organizar elementos verticalmente
+               column(width = 12,
+                      # Parte superior con el gráfico de barras
+                      plotOutput("bar_plot", height = 400)),
+               column(width = 12,
+                      # Parte inferior con la tabla de correlación
+                      dataTableOutput("correlation_table"))
+      ),
       
       # Summary 
       tabPanel("Summary", verbatimTextOutput("output_summary")),
-      # Table
-      tabPanel("Table", tableOutput("output_table")),
       #DataTable
-      tabPanel("DataTable", DTOutput("output_data_table"))
+      tabPanel("DataTable", DTOutput("output_data_table")),
+      # Table - tortillas
+      tabPanel("Tortilla Prices Details", DTOutput("output_table_tortilla")),
+      # Table - crimes
+      tabPanel("Table Crimes Details", DTOutput("output_table_crimes"))
     )
   )
 )

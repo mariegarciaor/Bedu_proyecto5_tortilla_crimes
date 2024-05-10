@@ -4,7 +4,7 @@ library(dplyr)
 library(DescTools)
 
 load_data <- function() {
-  df <- read.csv("/cloud/project/mexico_crime_and_tortilla.csv")
+  df <- read.csv("mexico_crime_and_tortilla.csv")
 
 # DATA CLEANNING
 months_str <- month.name
@@ -234,7 +234,8 @@ data_list <- list(
   crime_simp_df = crime_simp_df,
   full_df = full_df,
   correlation_total = correlation_total,
-  correlation_by_state = correlation_by_state
+  correlation_by_state = correlation_by_state,
+  bar_plot = bar_plot
 )
 
 return(data_list)
