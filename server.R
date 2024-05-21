@@ -2,6 +2,7 @@ library(shiny)
 library(ggplot2)
 library(dplyr)
 library(DT)
+library(markdown)
 
 # Cargar datos al iniciar la aplicación
 source("functions.R")
@@ -17,28 +18,27 @@ tortilla_simp_df<- data$tortilla_simp_df
 crime_simp_df<- data$crime_simp_df
 correlation_total<- data$correlation_total
 correlation_by_state<- data$correlation_by_state
-bar_plot<- data$bar_plot
 
 # Se define el servidor para la aplicación Shiny
 shinyServer(
-function(input, output) {
-  
+function(input, output, session) {
+  introduccion <- readLines("README.md")
   # Plots
   output$my_plot <- renderPlot({
     # Filtrar los datos según la variable x seleccionada y el modo de visualización
     filtered_df <- switch(input$x,
-                          "year" = {
-                            if (length(input$selected_years) == 0) {
-                              full_df
-                            } else {
-                              filter(full_df, year %in% input$selected_years)
-                            }
-                          },
                           "full_date" = {
                             if (length(input$selected_full_dates) == 0) {
                               full_df
                             } else {
                               filter(full_df, full_date %in% input$selected_full_dates)
+                            }
+                          },
+                          "year" = {
+                            if (length(input$selected_years) == 0) {
+                              full_df
+                            } else {
+                              filter(full_df, year %in% input$selected_years)
                             }
                           },
                           full_df)
@@ -53,15 +53,61 @@ function(input, output) {
     # Generar el gráfico
     ggplot(filtered_df, aes_string(x = input$x, y = input$y, color = "state", group = "state")) +
       geom_line() +
-      labs(title = paste(input$y, "Over", input$x),
-           x = input$x, y = input$y,
+      labs(title = paste(gsub("tortilla_avg_price", "Precio promedio de tortilla", 
+                              gsub("total_crimes", "Total de crímenes", input$y)),
+                         "por",
+                         ifelse(input$x == "year", "Año", "Fecha completa")),
+           x = ifelse(input$x == "year", "Año", "Fecha completa"), 
+           y = gsub("tortilla_avg_price", "Precio promedio de tortilla", 
+                    gsub("total_crimes", "Total de crímenes", input$y)),
            color = "State")
   })
   
   # Correlación
-  # Mostrar el gráfico de barras
   output$bar_plot <- renderPlot({
-    data_list$bar_plot
+    # Filtrar los datos según los estados seleccionados
+    if (length(input$selected_states_correlation) > 0) {
+      filtered_data <- correlation_by_state %>%
+        filter(state %in% input$selected_states_correlation)
+    } else {
+      filtered_data <- correlation_by_state
+    }
+    
+    # Filtrar los datos según los tipos de correlación seleccionados
+    if (length(input$selected_correlation_type) > 0) {
+      filtered_data <- filtered_data %>%
+        filter(correlation_type %in% input$selected_correlation_type)
+    }
+    
+    # Generar el gráfico de barras solo si hay datos filtrados
+    if (nrow(filtered_data) > 0) {
+      ggplot(filtered_data, aes(x = state, y = correlation, fill = correlation_type)) +
+        geom_bar(stat = "identity", position = "dodge") +
+        labs(title = "Correlation by State",
+             x = "State",
+             y = "Correlation") +
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        scale_fill_manual(values = c("Strong Positive Correlation" = "#581845",
+                                      "Weak Positive Correlation" = "#C70039",
+                                      "Weak Correlation" = "#808080",
+                                      "Weak Negative Correlation" = "#FF5733",
+                                      "Strong Negative Correlation" = "#FFC300"
+                                      
+                                      ))
+    } else {
+      # Si no hay datos filtrados, mostrar un mensaje o un gráfico vacío
+      plot(NULL, xlim = c(0, 1), ylim = c(0, 1), 
+           main = "No hay datos para mostrar", 
+           xlab = "", ylab = "")
+    }
+  })
+  
+  
+  # Introduction
+  output$introduccion_content <- renderUI({
+    invalidateLater(1000, session)  # Invalidar el cacheado cada segundo (1000 ms)
+    HTML(markdownToHTML(paste(introduccion, collapse = "\n")))
   })
   
   # Mostrar la tabla
@@ -73,6 +119,11 @@ function(input, output) {
   # Summary
   output$output_summary <- renderPrint({
     summary(full_df)
+  })
+  
+  # Rhtml Report
+  output$rhtml_content <- renderUI({
+    includeHTML("conclusiones.Rhtml")
   })
   
   # DataTable

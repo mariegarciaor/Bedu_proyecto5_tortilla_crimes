@@ -1,27 +1,27 @@
-# Análisis del vínculo entre el crimen y el precio de la tortilla en México
-
 ![Tortillas](https://mexiconewsdaily.com/wp-content/uploads/2019/06/tortillas-1.jpg)
 
+<span style="font-size: 14px; font-weight: bold;">Introducción</span>
 
-## Introducción:
 Este estudio se centra en explorar la relación entre el precio de la tortilla y la incidencia delictiva en México. Se utilizarán datos recopilados de más de 270,000 registros de precios de tortilla, abarcando diversas ciudades y establecimientos en todo el país. Asimismo, se empleará un conjunto de datos exhaustivo sobre incidentes criminales en México, obtenido de fuentes gubernamentales oficiales, para analizar patrones y tendencias relacionadas con la criminalidad en diferentes regiones.
 
 El estudio de la relación entre el precio de la tortilla y la incidencia delictiva es crucial para comprender la dinámica económica y social en México. La tortilla es un alimento básico en la dieta de la población mexicana y sus fluctuaciones de precio pueden tener un impacto significativo en la estabilidad de las comunidades. Además, la seguridad pública juega un papel determinante en el desarrollo económico, ya que la presencia de altos índices delictivos puede afectar el progreso de las comunidades.
 
-## Objetivo: 
+<span style="font-size: 14px; font-weight: bold;">Objetivo</span>
+
 Proporcionar información valiosa para la toma de decisiones en políticas públicas y estrategias empresariales que contribuyan al bienestar económico y social del país.
 
-## Preguntas clave:
+<span style="font-size: 14px; font-weight: bold;">Preguntas clave</span>
+
 1. ¿Cuál es la variación de precios de la tortilla en relación con la incidencia delictiva en diferentes áreas geográficas de México?.
 2. ¿Qué tipos de crímenes y en qué regiones existe una relación significativa entre el precio de la tortilla y la criminalidad?.
 
-## Hipótesis
+<span style="font-size: 14px; font-weight: bold;">Hipótesis</span>
+
 Hay una correlación significativa entre las variaciones en el precio de la tortilla y la incidencia delictiva en México. Se espera que períodos de aumentos bruscos en el precio de la tortilla coincidan con incrementos en la actividad criminal, especialmente en aquellas regiones donde el crimen organizado participa en el establecimiento de precios de la tortilla. Esta relación refleja la compleja interacción entre factores económicos y sociales en la dinámica delictiva del país.
 
 Además, se anticipa que la seguridad pública juegue un papel crucial en mitigar los efectos negativos de estas fluctuaciones económicas en la estabilidad social y económica de las comunidades afectadas.
 
-
-## Datasets
+<span style="font-size: 14px; font-weight: bold;">Datasets</span>
 
 - **Tortilla prices**
   - [Enlace al dataset](https://www.kaggle.com/datasets/richave/tortilla-prices-in-mexico)
@@ -48,25 +48,3 @@ Además, se anticipa que la seguridad pública juegue un papel crucial en mitiga
     - modality: The specific nature or method of the crime. This field details how the crime was committed or any specific characteristic that differentiates it within its subtype. Examples include 'With violence', 'Without violence', 'Sexual Bullying'.
     - month: The month when the crime was reported. This is a textual field representing the month (e.g., January).
     - count: The number of reported incidents for the specific crime type, subtype, and modality in the given entity and month. This is a numeric field
-
-
-## Limpieza de datos
-[x] Delimitar rango de tiempo.
-[x] Decidir entre usar identificadores numéricos o texto para estados (se eligió texto)
-[] Estandarización de los nombres de estados.
-[] Decidir entre hacer una vista diaria, mensual o anual (se eligió mensual)
-[] Crear una vista mensual para precios de la tortilla y crimenes.
-[] Definir nueva estructura para el dataset.
-state | year | month | tortilla_price | store_type | count_of_crimes | type_of_crime | type_of_crime | crime_modality
-
-
-
-
-## Estructura del código:
-
-
-## Gráficas e interpretación
-
-## Hallazgos
-
-## Conclusiones y recomendaciones

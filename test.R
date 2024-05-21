@@ -1,11 +1,9 @@
-# PACKAGES
 library(ggplot2)
 library(dplyr)
 library(DescTools)
 
-load_data <- function() {
-  df <- read.csv("mexico_crime_and_tortilla.csv")
-
+df <- read.csv("mexico_crime_and_tortilla.csv")
+df
 
 # DATA CLEANNING
 months_str <- month.name
@@ -77,7 +75,7 @@ median_crimes <- median(df_crimes$count_of_crimes, na.rm = TRUE)
 sd_crimes <- sd(df_crimes$count_of_crimes, na.rm = TRUE)
 minimum_crimes <- min(df_crimes$count_of_crimes, na.rm = TRUE)
 maximum_crimes <- max(df_crimes$count_of_crimes, na.rm = TRUE)
-
+df_tortilla
 
 # SIMPLIFIED SUBSETS
 # We created simplified subsets that allowed us to have only one aggregated row per state and date (month, year).
@@ -153,30 +151,5 @@ correlation_by_state <- correlation_by_state %>%
     abs(correlation) <= 0.7 ~ "Weak Correlation"
   ))
 
-# Crear un gráfico de barras para la correlación por estado
-bar_plot <- ggplot(correlation_by_state, aes(x = state, y = correlation, fill = correlation_type)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Correlation by State",
-       x = "State",
-       y = "Correlation") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-
-# Return a list of objects
-data_list <- list(
-  df = df,
-  df_tortilla = df_tortilla,
-  df_crimes = df_crimes,
-  mean_tortilla = mean_tortilla,
-  mean_mom_and_pop = mean_mom_and_pop,
-  mean_big_retail = mean_big_retail,
-  tortilla_simp_df = tortilla_simp_df,
-  crime_simp_df = crime_simp_df,
-  full_df = full_df,
-  correlation_total = correlation_total,
-  correlation_by_state = correlation_by_state
-)
-return(data_list)
-}
-print("load_data() function loaded successfully.")
+View(correlation_by_state)
+write.csv(correlation_by_state, "correlation_by_state.csv", row.names = FALSE)
